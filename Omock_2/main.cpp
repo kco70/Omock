@@ -9,80 +9,28 @@ using namespace std;
 
 int main()
 {
-	int count = 0;
-	char color = 'N';
-	int flag = 0;
-	int x = 0;
-	int y = 0;
+	int select = 0;
 
-	Design GridMap;
-	Function Mapping;
+	Function Game;
 
-	GridMap.Basic();
-
-	cout << "흑부터 게임을 시작합니다." << endl;
-	cout << "1~10 중 쉼표로 구분된 좌표를 입력해주세요 (예시 : 2,4)" << endl;
-	cout << endl;
-
-	while (flag == 0)
-	{ 
-		if (count % 2 == 0)
-		{
-			cout << "흑의 차례입니다 : ";
-
-			string coor;
-
-			getline(cin, coor);
-
-			stringstream ss(coor);
-
-			string sx, sy;
-
-			getline(ss, sx, ',');
-			getline(ss, sy, ',');
-
-			x = stoi(sx);
-			y = stoi(sy);
-
-			color = Mapping.BlockPlay(x, y);
-			GridMap.ChangeColor(x, y, color);
-			cout << endl;
-		}
-		else if (count % 2 == 1)
-		{
-			cout << "백의 차례입니다 : ";
-
-			string coor;
-
-			getline(cin, coor);
-
-			stringstream ss(coor);
-
-			string sx, sy;
-
-			getline(ss, sx, ',');
-			getline(ss, sy, ',');
-
-			x = stoi(sx);
-			y = stoi(sy);
-
-			color = Mapping.WhitePlay(x, y);
-			GridMap.ChangeColor(x, y, color);
-			cout << endl;
-		}
-
-		flag = Mapping.CheckWin(x, y);
-
-		count++;
-	}
-
-	if (count % 2 == 1)
+	while (1)
 	{
-		cout << "흑의 승리입니다!" << endl;
-	}
-	else if (count % 2 == 0)
-	{
-		cout << "백의 승리입니다!" << endl;
+		cout << "1. 게임 시작" << endl;
+		cout << "2. 게임 종료" << endl;
+
+		cin >> select;
+
+		if (select == 1)
+		{
+			Game.Play();
+		}
+		else if (select == 2)
+		{
+			cout << "게임을 종료합니다. " << endl;
+			break;
+		}
+		else
+			cout << "메뉴 내에서 입력해주세요." << endl;
 	}
 
 	return 0;
