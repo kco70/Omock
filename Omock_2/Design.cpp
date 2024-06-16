@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "Design.h"
 
 using namespace std;
@@ -8,96 +9,86 @@ Design::Design()
 
 }
 
-void Design::Basic()
+void Design::GridMap(int inx, int iny, char color)
 {
-	// (0,0) ~ (0,9)에 숫자 할당
-	for (int y = 0; y < 10; y++)
+	for (int x = 0; x < 10; x++)
 	{
-		ui_map[0][y] = '0' + y;
-	}
+		// y = 0열 x 행의 세로 번호 (0 ~ 9)
+		cout << x << " ";
 
-	// (1,0) ~ (9,9) 할당
-	for (int y = 0; y < 10; y++)
-	{
-		// (1,0) ~ (9,0)에 숫자 할당
-		if (y == 0)
+		// x = 0행 y 행의 가로 번호 (0 ~ 9)
+		if (x == 0)
 		{
-			for (int x = 0; x < 10; x++)
+			for (int y = 1; y < 10; y++)
 			{
-				ui_map[x][0] = '0' + x;
+				cout << y << "  ";
 			}
 		}
-		// (2,1) ~ (2,9)에 상단 모서리 할당
-		else if (y == 1)
+		// x = 1 행 상단 모서리 (┌┬┬┐)
+		else if (x == 1)
 		{
-			for (int x = 1; x < 10; x++)
+			for (int y = 1; y < 10; y++)
 			{
-				if (x == 1)
-					ui_map[x][y] = '+'; //┌
-				else if (x == 9)
-					ui_map[x][y] = '+'; // ┐
+				if (x == inx && y == iny)
+				{
+					if (color == 'B')
+						cout << " " << "●" << " ";
+					else if (color == 'W')
+						cout << " " << "○" << " ";
+				}
+				else if (y == 1)
+					cout << "┌-";
+				else if (y == 9)
+					cout << "-┐";
 				else
-					ui_map[x][y] = '+'; // ┬
+					cout << "-┬-";
 			}
+
 		}
-		// (9,1) ~ (9,9)에 하단 모서리 할당
-		else if (y == 9)
+		// x = 9 행 하단 모서리 (└┴┴┘)
+		else if (x == 9)
 		{
-			for (int x = 1; x < 10; x++)
+			for (int y = 1; y < 10; y++)
 			{
-				if (x == 1)
-					ui_map[x][y] = '+'; //└
-				else if (x == 9)
-					ui_map[x][y] = '+'; // ┘
+				if (x == inx && y == iny)
+				{
+					if (color == 'B')
+						cout << " " << "●" << " ";
+					else if (color == 'W')
+						cout << " " << "○" << " ";
+				}
+				else if (y == 1)
+					cout << "└-";
+				else if (y == 9)
+					cout << "-┘";
 				else
-					ui_map[x][y] = '+'; // ┴
+					cout << "-┴-";
 			}
 		}
-		// (3,1) ~ (8,9)에 중앙 격자 할당 
+		// x = 2 ~ 9 행 중단 (├┼┼┤)
 		else
 		{
-			for (int x = 1; x < 10; x++)
+			for (int y = 1; y < 10; y++)
 			{
-				if (x == 1)
-					ui_map[x][y] = '+'; //├
-				else if (x == 9)
-					ui_map[x][y] = '+'; // ┤
+				if (x == inx && y == iny)
+				{
+					if (color == 'B')
+						cout << " " << "●" << " ";
+					else if (color == 'W')
+						cout << " " << "○" << " ";
+				}
+				else if (y == 1)
+					cout << "├-";
+				else if (y == 9)
+					cout << "-┤";
 				else
-					ui_map[x][y] = '+'; // ┼
+					cout << "-┼-";
 			}
 		}
-	}
-
-	for (int i = 0; i < 10; i++)
-	{
-		for (int j = 0; j < 10; j++)
-		{
-			cout << ui_map[i][j] << "  ";
-		}
 		cout << endl;
 	}
 }
 
-void Design::ChangeColor(int x, int y, char color)
-{
-	if (color == 'B')
-	{
-		ui_map[x][y] = 'B';
-	}
-	else if (color == 'W')
-	{
-		ui_map[x][y] = 'W';
-	}
-
-	for (int i = 0; i < 10; i++)
-	{
-		for (int j = 0; j < 10; j++)
-		{
-			cout << ui_map[i][j] << "  ";
-		}
-		cout << endl;
-	}
-}
 
 Design::~Design()
 {

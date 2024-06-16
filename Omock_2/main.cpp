@@ -22,6 +22,7 @@ int main()
 
 		if (select == 1)
 		{
+			cout << "게임을 시작합니다." << endl;
 			Game.Play();
 		}
 		else if (select == 2)

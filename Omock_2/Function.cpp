@@ -54,7 +54,9 @@ void Function::Input()
 	inx = 0;
 	iny = 0;
 
-	string coor;
+	string coor = "0,0";
+
+	cin.ignore();
 
 	getline(cin, coor);
 
@@ -64,7 +66,7 @@ void Function::Input()
 
 	getline(ss, sx, ',');
 	getline(ss, sy, ',');
-
+	 
 	inx = stoi(sx);
 	iny = stoi(sy);
 }
