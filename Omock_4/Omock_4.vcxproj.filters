@@ -35,19 +35,19 @@
     <ClInclude Include="user.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="game.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="omock.h">
       <Filter>헤더 파일\추상 클래스</Filter>
     </ClInclude>
     <ClInclude Include="map.h">
       <Filter>헤더 파일\추상 클래스</Filter>
     </ClInclude>
+    <ClInclude Include="grid.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="player.h">
       <Filter>헤더 파일\추상 클래스</Filter>
     </ClInclude>
-    <ClInclude Include="grid.h">
+    <ClInclude Include="game.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

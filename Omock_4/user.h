@@ -1,5 +1,5 @@
-#pragma once
 #ifndef _USER_H_
+#define _USER_H_
 
 #include <iostream>
 #include <string>
@@ -9,6 +9,10 @@ using namespace std;
 
 class User : public Player
 {
+private :
+	string name;
+	int turn;
+
 public : 
 	User();
 

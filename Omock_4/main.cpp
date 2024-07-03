@@ -11,7 +11,6 @@ int main()
 
 	person.setID();
 	round.menu();
-	person.getWinnerID(round.over());
 
 	return 0;
 }

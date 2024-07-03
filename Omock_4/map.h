@@ -1,13 +1,10 @@
-#pragma once
 #ifndef _MAP_H_
+#define _MAP_H_
 
 class Map
 {
-protected:
-	int x, y;
 public:
-	virtual void drawMap();
+	virtual void drawMap() = 0;
 };
 
-#else
 #endif // !_MAP_H_

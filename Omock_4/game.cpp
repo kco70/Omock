@@ -5,6 +5,7 @@
 #include <conio.h>
 #include <Windows.h>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,9 +15,7 @@ Game::Game()
 	this->y = 1;
 	this->count = 0;
 	this->turn = 0;;
-	this->currentX = 0;
-	vector<pair<int, int>> vec;
-	char c = ' ';
+	char c = '0';
 	string stone = "";
 }
 
@@ -63,7 +62,7 @@ void Game::menu()
 		{
 			cout << "게임을 종료합니다." << endl;
 			this->turn = -1;
-			over();
+			over(turn); 
 		}
 		else
 			cout << "Y 또는 N으로 입력해주세요." << endl;
@@ -80,10 +79,10 @@ void Game::start()
 	cout << "흑돌 먼저 시작합니다. " << endl;
 	cout << "돌을 두고 싶은 장소에서 ENTER을 입력하세요" << endl;
 
-	while (true)
-		inputKey();
+	inputKey();
 }
 
+//************************************************************
 void Game::inputKey()
 {
 	while (true)
@@ -101,38 +100,66 @@ void Game::inputKey()
 			}
 			else if (input == ENTER)
 			{
-				if (inputCheck(x, y))
+				if (turn % 2 == 0)
 				{
-					vec.push_back(make_pair(x, y));
-
-					for (int i = 0; i < vec.size(); i++)
-					{
-						gotoxy(0, 10 + i);
-						cout << "vecter 크기 : " << vec.size() << endl;
-						cout << "vec : ";
-						cout << "{" << vec[i].first << ", " << vec[i].second << "} ";
-					}
-					gotoxy(x, y);
-
-					palceStone(turn);
-
-					winnerCheck(vec);
-
-					turn++;
+					checkStone(x, y, vecBlack);
+					cout << "●";
+				}
+				else if (turn % 2 == 1)
+				{
+					checkStone(x, y, vecWhite);
+					cout << "○";
 				}
 			}
+			turn++;
 		}
 	}
 }
 
-
-void Game::palceStone(int turn)
+bool Game::checkStone(int x, int y, vector<pair<int, int>> vecColor)
 {
-	if (turn % 2 == 0)
-		cout << "●";
-	else if (turn % 2 == 1)
-		cout << "○";
+	return (countStone(x, y, 1, 0, vecColor) + countStone(x, y, -1, 0, vecColor) - 1 == 5 ||
+			countStone(x, y, 0, 1, vecColor) + countStone(x, y, 0, -1, vecColor) - 1 == 5 ||
+			countStone(x, y, 1, 1, vecColor) + countStone(x, y, -1, -1, vecColor) - 1 == 5 ||
+		    countStone(x, y, 1, -1, vecColor) + countStone(x, y, -1, 1, vecColor) - 1 == 5);
 }
+
+int Game::countStone(int x, int y, int dx, int dy, vector<pair<int, int>> vecColor)
+{
+	count = 0;
+	
+	while (0 <= x < X_MAX && 0 <= y < Y_MAX)
+	{
+		if (inputCheck(vecColor)) 
+		{
+			vecColor.push_back(make_pair(x, y));
+			count++;
+			x = x + 3 * dx;
+			y = y + dy;
+		}
+		else 
+		{
+			return 0;
+		}
+
+		return count;
+	}
+}
+
+bool Game::inputCheck(vector<pair<int, int>> vecColor)
+{
+	for (const auto& p : vecColor)
+	{
+		if (p.first == x && p.second == y)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+//************************************************************
+
 
 void Game::direcKey(char input)
 {
@@ -180,16 +207,6 @@ void Game::direcKey(char input)
 	gotoxy(x, y);
 }
 
-bool Game::inputCheck(int x, int y)
-{
-	for (int i = 0; i < vec.size(); i++)
-	{
-		if (vec[i].first == x && vec[i].second == y)
-			return false;
-	}
-	return true;
-}
-
 void Game::gotoxy(int x, int y)
 {
 	COORD Pos;
@@ -198,95 +215,23 @@ void Game::gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
 
-vector<pair<int, int>> Game::swapXY(vector<pair<int, int>> vec)
-{
-	vector<int> vecX;
-	vector<int> vecY;
-
-	for (int i = 0; i < vec.size(); i++)
-	{
-		vecX.push_back(vec[i].first);
-		vecY.push_back(vec[i].second);
-	}
-
-	vector<pair<int, int>> vec2;
-
-	for (int i = 0; i < vec.size(); i++)
-	{
-		vec2.push_back(make_pair(vecY[i], vecX[i]));
-	}
-
-	return vec2;
-}
-
-
-// winnercheck 전체 수정 예정
-void Game::winnerCheck(vector<pair<int, int>> vec)
-{
-	count = 0;
-
-	//x 축을 기준으로 5개 이상의 값이 나열될 경우 종료 +3
-	for (const auto& p : vec)
-	{
-		if (p.first != currentX)
-		{
-			if (currentX != -1)
-			{
-				count = 0;
-			}
-			currentX = p.first;
-		}
-		count++;
-
-		if (count > 4)
-			over();
-	}
-
-	// y축을 기준으로 5개 이상 나열될 경우 +1
-	vector<pair<int, int>> vecYX = swapXY(vec);
-	for (const auto& p : vecYX)
-	{
-		if (p.first != currentX)
-		{
-			if (currentX != -1)
-			{
-				count = 0;
-			}
-			currentX = p.first;
-		}
-		count++;
-
-		if (count > 4)
-			over();
-	}
-
-	// 비례하는 x와 y가 5개 이상 나열된 경우 +3, +1?
-	for (const auto& p : vec)
-	{
-		if (p.first == p.second) // 해당 요소의 first가 second가 같지 않으면
-			count++; // 같으면 count +1 
-
-		count = 0;
-
-		if (count > 4)
-			over();
-	}
-
-	// 반비례하는 x와 y가 5개 이상 나열된 경우 +1. +3?
-	for (const auto& p : vec)
-	{
-		if (p.first + p.second == MAX)
-			count++;
-
-		count = 0;
-
-		if (count > 4)
-			over();
-	}
-}
-
-int Game::over()
+void Game::over(int turn)
 {	
-	return this->turn;
+	if (turn == -1)
+	{
+		cout << "오목을 종료합니다." << endl;
+	}
+	else if(turn % 2 == 0)
+	{
+		gotoxy(0, 13);
+		cout << "흑돌의 승리입니다" << endl;
+	}
+	else if (turn % 2 == 1)
+	{
+		gotoxy(0, 13);     
+		cout << "백돌의 승리입니다" << endl;
+	}
+
+
 }
 

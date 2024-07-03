@@ -1,5 +1,5 @@
-#pragma once
 #ifndef _OMOCK_H_
+#define _OMOCK_H_
 
 #define LEFT 75
 #define RIGHT 77
@@ -18,14 +18,6 @@ using namespace std;
 
 class Omock
 {
-protected:
-	int x, y;
-	vector<pair<int, int>> vec;
-	int count, turn;
-	int currentX;
-	char c;
-	string stone;
-
 public :
 	virtual int getX() = 0;
 	virtual int getY() = 0;
@@ -34,14 +26,12 @@ public :
 	virtual void start() = 0;
 	virtual void inputKey() = 0;
 	virtual void direcKey(char input) = 0;
-	virtual void palceStone(int count) = 0;
-	virtual bool inputCheck(int x, int y) = 0;
+	virtual bool inputCheck(vector<pair<int, int>> vecColor) = 0;
 	virtual void gotoxy(int x, int y) = 0;
 
-	virtual vector<pair<int, int>> swapXY(vector<pair<int, int>> vec) = 0;
-	virtual void winnerCheck(vector<pair<int, int>> vec) = 0;
-	virtual int over() = 0;
+	virtual bool checkStone(int x, int y, vector<pair<int, int>> vecColor) = 0;
+	virtual int countStone(int x, int y, int dx, int dy, vector<pair<int, int>> vecColor) = 0;
+	virtual void over(int turn) = 0;
 };
 
-#else
 #endif // _OMOCK_H_

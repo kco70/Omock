@@ -1,13 +1,13 @@
-#pragma once
 #ifndef _GIRD_H_
+#define _GRID_H_
 
 class Grid
 {
-protected: 
+private:
 	int x, y;
+
 public:
 	void drawMap();
 };
 
-#else
 #endif // !_GIRD_H_

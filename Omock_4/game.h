@@ -1,5 +1,5 @@
-#pragma once
 #ifndef _GAME_H_
+#define _GAME_H_
 
 #include "omock.h"
 #include <iostream>
@@ -12,6 +12,15 @@ using namespace std;
 
 class Game : public Omock
 {
+private:
+	int x, y;
+	vector<pair<int, int>> vecBlack;
+	vector<pair<int, int>> vecWhite;
+	int count, turn;
+	int currentX, currentY;
+	char c;
+	string stone;
+
 public:
 	Game();
 
@@ -22,14 +31,12 @@ public:
 	void start();
 	void inputKey();
 	void direcKey(char input);
-	void palceStone(int count);
-	bool inputCheck(int x, int y);
+	bool inputCheck(vector<pair<int, int>> vecColor);
 	void gotoxy(int x, int y);
 
-	vector<pair<int, int>> swapXY(vector<pair<int, int>> vec);
-	void winnerCheck(vector<pair<int, int>> vec);
-	int over();
+	bool checkStone(int x, int y, vector<pair<int, int>> vecColor);
+	int countStone(int x, int y, int dx, int dy, vector<pair<int, int>> vecColor);
+	void over(int turn);
 };
 
-#else
 #endif // !_GAME_H_
