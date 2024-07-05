@@ -19,9 +19,8 @@ using namespace std;
 class Omock
 {
 public :
-	virtual int getX() = 0;
-	virtual int getY() = 0;
-
+	virtual void getVec(vector<pair<int, int>> vecColor) = 0;
+	
 	virtual void menu() = 0;
 	virtual void start() = 0;
 	virtual void inputKey() = 0;
@@ -30,7 +29,7 @@ public :
 	virtual void gotoxy(int x, int y) = 0;
 
 	virtual bool checkStone(int x, int y, vector<pair<int, int>> vecColor) = 0;
-	virtual int countStone(int x, int y, int dx, int dy, vector<pair<int, int>> vecColor) = 0;
+	virtual int countStone(int dx, int dy, vector<pair<int, int>> vecColor) = 0;
 	virtual void over(int turn) = 0;
 };
 

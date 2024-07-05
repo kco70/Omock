@@ -17,15 +17,13 @@ private:
 	vector<pair<int, int>> vecBlack;
 	vector<pair<int, int>> vecWhite;
 	int count, turn;
-	int currentX, currentY;
 	char c;
 	string stone;
 
 public:
 	Game();
 
-	int getX();
-	int getY();
+	void getVec(vector<pair<int, int>> vecColor);
 
 	void menu();
 	void start();
@@ -35,7 +33,7 @@ public:
 	void gotoxy(int x, int y);
 
 	bool checkStone(int x, int y, vector<pair<int, int>> vecColor);
-	int countStone(int x, int y, int dx, int dy, vector<pair<int, int>> vecColor);
+	int countStone(int dx, int dy, vector<pair<int, int>> vecColor);
 	void over(int turn);
 };
 

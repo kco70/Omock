@@ -19,14 +19,21 @@ Game::Game()
 	string stone = "";
 }
 
-int Game::getX()
+void Game::getVec(vector<pair<int, int>> vecColor)
 {
-	return this->x;
-}
+	if (turn % 2 == 0)
+	{
+		gotoxy(0, 13);
+		cout << "vecBlack : ";
+	}
+	else if (turn % 2 == 1)
+	{
+		gotoxy(0, 14);
+		cout << "vecWhite : ";
+	}
 
-int Game::getY()
-{
-	return this->y;
+	for (const auto& p : vecColor)
+		cout << "{" << p.first << ", " << p.second << "} ";
 }
 
 void Game::menu()
@@ -60,9 +67,9 @@ void Game::menu()
 		}
 		else if (c == 'n' || c == 'N')
 		{
-			cout << "게임을 종료합니다." << endl;
 			this->turn = -1;
-			over(turn); 
+			over(turn);
+			break;
 		}
 		else
 			cout << "Y 또는 N으로 입력해주세요." << endl;
@@ -82,12 +89,12 @@ void Game::start()
 	inputKey();
 }
 
-//************************************************************
 void Game::inputKey()
 {
 	while (true)
 	{
 		char input;
+		gotoxy(x, y);
 
 		if (_kbhit())
 		{
@@ -100,50 +107,83 @@ void Game::inputKey()
 			}
 			else if (input == ENTER)
 			{
-				if (turn % 2 == 0)
+				if (inputCheck(vecBlack) && inputCheck(vecWhite))
 				{
-					checkStone(x, y, vecBlack);
-					cout << "●";
+					if (turn % 2 == 0)
+					{
+						vecBlack.push_back(make_pair(x, y));
+						cout << "●";
+						if (checkStone(x, y, vecBlack))
+						{
+							over(turn);
+							break;
+						}
+//						getVec(vecBlack);
+					}
+					else if (turn % 2 == 1)
+					{
+						vecWhite.push_back(make_pair(x, y));
+						cout << "○";
+						if (checkStone(x, y, vecWhite))
+						{
+							over(turn);
+						}
+//						getVec(vecWhite);
+					}
 				}
-				else if (turn % 2 == 1)
-				{
-					checkStone(x, y, vecWhite);
-					cout << "○";
-				}
+				turn++;
 			}
-			turn++;
 		}
 	}
 }
-
+   
 bool Game::checkStone(int x, int y, vector<pair<int, int>> vecColor)
 {
-	return (countStone(x, y, 1, 0, vecColor) + countStone(x, y, -1, 0, vecColor) - 1 == 5 ||
-			countStone(x, y, 0, 1, vecColor) + countStone(x, y, 0, -1, vecColor) - 1 == 5 ||
-			countStone(x, y, 1, 1, vecColor) + countStone(x, y, -1, -1, vecColor) - 1 == 5 ||
-		    countStone(x, y, 1, -1, vecColor) + countStone(x, y, -1, 1, vecColor) - 1 == 5);
+//	gotoxy(0, 16);
+
+	int xCount = countStone(1, 0, vecColor);
+	int yCount = countStone(0, 1, vecColor);
+	int xyCount = countStone(1, 1, vecColor);
+	int minusxyCount = countStone(-1, 1, vecColor);
+
+//	cout << "xCount : " << xCount << endl;
+//	cout << "yCount : " << yCount << endl;
+//	cout << "xyCount : " << xyCount << endl;
+//	cout << "minusxyCount : " << minusxyCount << endl;
+
+	return (xCount == 5 || yCount == 5 || xyCount == 5 || minusxyCount == 5);
 }
 
-int Game::countStone(int x, int y, int dx, int dy, vector<pair<int, int>> vecColor)
+int Game::countStone(int dx, int dy, vector<pair<int, int>> vecColor)
 {
 	count = 0;
-	
-	while (0 <= x < X_MAX && 0 <= y < Y_MAX)
-	{
-		if (inputCheck(vecColor)) 
-		{
-			vecColor.push_back(make_pair(x, y));
-			count++;
-			x = x + 3 * dx;
-			y = y + dy;
-		}
-		else 
-		{
-			return 0;
-		}
+	x = vecColor[0].first;
+	y = vecColor[0].second;
 
-		return count;
+
+	for (int i = 0; i < vecColor.size(); i++)
+	{
+		if (x == vecColor[i].first && y == vecColor[i].second)
+		{
+			count++;
+
+			x = x + dx * 3;
+			y += dy;
+		}
 	}
+
+	for (const auto& p : vecColor)
+	{
+		if (p.first == x && p.second == y)
+		{
+			count++;
+
+			x = x + dx * 3;
+			y += dy;
+		}
+	}
+
+	return count;
 }
 
 bool Game::inputCheck(vector<pair<int, int>> vecColor)
@@ -157,8 +197,6 @@ bool Game::inputCheck(vector<pair<int, int>> vecColor)
 	}
 	return true;
 }
-
-//************************************************************
 
 
 void Game::direcKey(char input)
@@ -204,6 +242,7 @@ void Game::direcKey(char input)
 		y = 1;
 	}
 
+
 	gotoxy(x, y);
 }
 
@@ -231,7 +270,6 @@ void Game::over(int turn)
 		gotoxy(0, 13);     
 		cout << "백돌의 승리입니다" << endl;
 	}
-
 
 }
 
